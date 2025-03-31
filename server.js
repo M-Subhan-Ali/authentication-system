@@ -10,3 +10,6 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors({ credentials: true}))
 
+app.listen(port , ()=>{
+  console.log(`server is running on ${port}`)
+})
