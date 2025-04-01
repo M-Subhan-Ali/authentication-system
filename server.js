@@ -10,6 +10,9 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors({ credentials: true}))
 
+app.get("/hehe" , (req , res)=>{
+  res.send("api working hehe subhan ali")
+})
 app.listen(port , ()=>{
   console.log(`server is running on ${port}`)
 })
