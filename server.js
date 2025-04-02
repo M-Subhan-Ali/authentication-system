@@ -13,6 +13,10 @@ app.use(cors({ credentials: true}))
 app.get("/hehe" , (req , res)=>{
   res.send("api working hehe subhan ali")
 })
+
+app.get("/subhan" , (req , res) => {
+  res.send("subhan")
+})
 app.listen(port , ()=>{
   console.log(`server is running on ${port}`)
 })
