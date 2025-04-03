@@ -2,9 +2,12 @@ import express from "express"
 import cookieParser from "cookie-parser"
 import cors from "cors"
 import "dotenv/config";
+import DBConnect from "./ConfigDataBase/mongoDB.js";
 
 const app = express();
 const port = process.env.PORT || 4000;
+
+DBConnect();
 
 app.use(express.json());
 app.use(cookieParser());
