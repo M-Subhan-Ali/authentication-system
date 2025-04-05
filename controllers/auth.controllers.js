@@ -17,7 +17,7 @@ export const register = async ( req , res ) => {
     const existingUser = await User.findOne({email})
 
     if(existingUser){
-      return res.json({message:"User Already Exist!"})
+      return res.status(409).json({message:"User Already Exist!"})
     }
    
     const hashedPassword = await bcrypt.hash(password,11); 
@@ -27,6 +27,8 @@ export const register = async ( req , res ) => {
       email,
       password:hashedPassword
     })
+
+    await user.save()
 
     const token = jwt.sign({
       id:user._id
@@ -41,6 +43,10 @@ export const register = async ( req , res ) => {
       sameSite :  process.env.NODE_ENV === "production" ? 'none' : 'strict',
       maxAge : 9 * 24 * 60 * 60 * 1000
     })
+
+    return res.json({
+      success : true,
+      message:"SuccessFully Registered!"})
     
   } catch (error) {
     res.status(500).json({
@@ -48,6 +54,80 @@ export const register = async ( req , res ) => {
     })
   }
 
+}
 
 
+export const Login = async ( req , res ) => {
+
+  const {  email , password } = req.body;
+
+  if( !email || !password ){
+    return res.status(401).json({message : "Please fill the required fields!"})
+  }
+
+  try {
+    const existingUser = await User.findOne({email})
+  
+    if( !existingUser ){
+      return res.json({
+        success : false,
+        message : "Invalid email! or user not exists!"})
+    }
+  
+    const isMacthedPassword = await bcrypt.compare( password , existingUser.password);
+  
+    if( !isMacthedPassword ){
+      return res.status(401)
+      .json({
+        success : false,
+        message : "Incorrect Password!"})
+    }
+  
+    const token = jwt.sign({
+      id : existingUser._id
+    },
+     process.env.SECRET,
+    {expiresIn : "9d"}
+    )
+    
+    res.cookie('token' , token , {
+      httpOnly : true,
+      secure : process.env.NODE_ENV === "production",
+      sameSite : process.env.NODE_ENV === "production" ? "none" : "strict",
+      maxAge : 9 * 24 * 60 * 60 * 1000
+    })
+
+    return res.json({
+      success : true,
+      message: "SuccessFully Login!"})
+  
+  } catch (error) {
+   
+    res.status(500).json({message : `Internal Server Error ${error}`})
+    
+  }
+
+}
+
+
+export const Logout = async ( req , res ) => {
+
+  try {
+    
+    res.clearCookie("token",{
+      httpOnly : true ,
+      secure : process.env.NODE_ENV === "production",
+      sameSite : process.env.NODE_ENV === "production" ? "none" : "strict",
+    })
+
+    return res.json({
+    success  : true , 
+    message : "Logged Out!"})
+
+  } catch (error) {
+    
+    res.status(500).json({message : `Internal Server Error ${error}`})
+    
+  }
+  
 }
