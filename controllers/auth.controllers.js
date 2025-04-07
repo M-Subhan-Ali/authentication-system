@@ -1,6 +1,7 @@
 import { User } from "../models/user.models.js";
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken" 
+import sendWelcomeEmail from "../ConfigDataBase/nodemailer.js";
 
 export const register = async ( req , res ) => {
   
@@ -43,6 +44,8 @@ export const register = async ( req , res ) => {
       sameSite :  process.env.NODE_ENV === "production" ? 'none' : 'strict',
       maxAge : 9 * 24 * 60 * 60 * 1000
     })
+    
+    await sendWelcomeEmail(email,name)
 
     return res.json({
       success : true,

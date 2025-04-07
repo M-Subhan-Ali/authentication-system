@@ -1,28 +1,28 @@
-const nodemailer = require("nodemailer");
+// utils/sendEmail.js
+import nodemailer from "nodemailer";
 
-const transporter = nodemailer.createTransport({
-  host: "smtp.ethereal.email",
-  port: 587,
-  secure: false, // true for port 465, false for other ports
-  auth: {
-    user: "maddison53@ethereal.email",
-    pass: "jn7jnAPss4f63QBp6D",
-  },
-});
+const sendWelcomeEmail = async (toEmail, name) => {
+  try {
+    const transporter = nodemailer.createTransport({
+      service: "Gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
 
-// async..await is not allowed in global scope, must use a wrapper
-async function main() {
-  // send mail with defined transport object
-  const info = await transporter.sendMail({
-    from: '"Maddison Foo Koch 👻" <maddison53@ethereal.email>', // sender address
-    to: "bar@example.com, baz@example.com", // list of receivers
-    subject: "Hello ✔", // Subject line
-    text: "Hello world?", // plain text body
-    html: "<b>Hello world?</b>", // html body
-  });
+    const mailOptions = {
+      from: `"MERN Auth" <${process.env.EMAIL_USER}>`,
+      to: toEmail,
+      subject: "🎉 Welcome to MERN Auth!",
+      html: `<h3>Hi ${name},</h3><p>Thanks for registering with our app!</p>`,
+    };
 
-  console.log("Message sent: %s", info.messageId);
-  // Message sent: <d786aa62-4e0a-070a-47ed-0b0666549519@ethereal.email>
-}
+    await transporter.sendMail(mailOptions);
+    console.log("✅ Welcome email sent to:", toEmail);
+  } catch (error) {
+    console.error("❌ Failed to send welcome email:", error);
+  }
+};
 
-main().catch(console.error);
+export default sendWelcomeEmail;
