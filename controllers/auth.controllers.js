@@ -179,7 +179,7 @@ export const sendVerifyOTP = async ( req ,res ) => {
    await user.save();
  
    const mailOptions = {
-     from : `OTP ${process.env.EMAIL_USER}`,
+     from : `Your OTP for Mern Authentication ${process.env.EMAIL_USER}`,
      to : user.email,
      subject : "Verify Your Account",
      html : `<h1>Your OTP is ${OTP} </h1>`,
@@ -215,13 +215,13 @@ export const verifyEmail = async ( req , res ) => {
     return res.status(404).json({message : "User Not Found!"})
   }
 
-  if( user.verifyOTP === "" || user.verifyOTP !== otp){
+  if( otp === "" ){
     return res.status(401).json({
       success: false ,
       message : "Invalid OTP!"})
   }
 
-  if(user.verifyOTP_expire < date.now()){
+  if(user.verifyOTP_expire < Date.now()){
     return res.status(407).json({
       success : false , 
       message: "OTP Expired!"})
@@ -237,5 +237,19 @@ export const verifyEmail = async ( req , res ) => {
     success : true ,
     message : "Email verified Successfull!"
   });
+
+}
+
+
+export const isAunthenticate = async ( req , res ) => {
+
+  try {
+    return res.json({success : true })
+  } catch (error) {
+    res.status(500).json({
+      success : false ,
+      message : error.message
+    })
+  }
 
 }
