@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { isAunthenticate, Login, Logout, register, sendVerifyOTP, verifyEmail } from "../controllers/auth.controllers.js";
+import { isAunthenticate, Login, Logout, register, resetPassword, sendResetOTP, sendVerifyOTP, verifyEmail } from "../controllers/auth.controllers.js";
 import userAuth from "../middlewares/userAuth.middleware.js";
 
 const route = Router();
@@ -16,4 +16,8 @@ route.post("/verifyAccount" , userAuth , verifyEmail )
 
 route.post("/is-auth" , userAuth , isAunthenticate )
 
-export {route as userRouter}
+route.post("/send-otp-reset-password" , sendResetOTP )
+
+route.post( "/reset-password" , resetPassword)
+
+export {route as userAuthRouter}
