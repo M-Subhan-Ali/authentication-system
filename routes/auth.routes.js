@@ -14,7 +14,7 @@ route.post("/send-verify-otp" , userAuth , sendVerifyOTP )
 
 route.post("/verifyAccount" , userAuth , verifyEmail )
 
-route.post("/is-auth" , userAuth , isAunthenticate )
+route.get("/is-auth" , userAuth , isAunthenticate )
 
 route.post("/send-otp-reset-password" , sendResetOTP )
 

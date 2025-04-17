@@ -9,7 +9,9 @@ export const getUserData = async ( req , res ) => {
     const user = await User.findById( userID );
 
     if( !user ){
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ 
+        success:false,
+        message: "User not found" });
     }
 
     return res.status(201).json({

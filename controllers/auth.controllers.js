@@ -4,12 +4,16 @@ import jwt from "jsonwebtoken"
 // import { sendWelcomeEmail } from "../ConfigDataBase/nodemailer.js";
 import { transporter } from "../ConfigDataBase/nodemailer.js";
 
+
+
+
 export const register = async ( req , res ) => {
   
   const { name , email , password } = req.body;
 
   if( !name || !email  || !password){
     return res.status(400).json({
+      success:false,
       message:"Please Fill the required fields"
     })
   }
@@ -19,7 +23,9 @@ export const register = async ( req , res ) => {
     const existingUser = await User.findOne({email})
 
     if(existingUser){
-      return res.status(409).json({message:"User Already Exist!"})
+      return res.status(409).json({
+        success:false,
+        message:"User Already Exist!"})
     }
    
     const hashedPassword = await bcrypt.hash(password,11); 
@@ -70,12 +76,15 @@ export const register = async ( req , res ) => {
 }
 
 
+
 export const Login = async ( req , res ) => {
 
   const {  email , password } = req.body;
 
   if( !email || !password ){
-    return res.status(401).json({message : "Please fill the required fields!"})
+    return res.status(401).json({
+      success:false,
+      message : "Please fill the required fields!"})
   }
 
   try {
