@@ -154,6 +154,9 @@ export const Logout = async ( req , res ) => {
   
 }
 
+
+
+
 export const sendVerifyOTP = async ( req ,res ) => {
  
   //steps for my learning
@@ -174,7 +177,7 @@ export const sendVerifyOTP = async ( req ,res ) => {
      return res.status(404).json({message : "User Not Found!"})
    }
  
-   if( user.verifyOTP ){
+   if( user.isAccountVerified ){
      return res.json({
        success : false, //because the user is already verify why he again verify
        message : "User Already Verified!"})
@@ -227,7 +230,7 @@ export const verifyEmail = async ( req , res ) => {
      return res.status(404).json({message : "User Not Found!"})
    }
  
-   if( otp === "" ){
+   if( otp === "" || otp != user.verifyOTP ){
      return res.status(401).json({
        success: false ,
        message : "Invalid OTP!"})
