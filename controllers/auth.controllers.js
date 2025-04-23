@@ -217,6 +217,7 @@ export const sendVerifyOTP = async ( req ,res ) => {
 
 export const verifyEmail = async ( req , res ) => {
 
+
   const { userID , otp } = req.body;
 
   if( !userID || !otp ){
