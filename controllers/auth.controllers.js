@@ -311,7 +311,7 @@ export const sendResetOTP = async ( req , res ) => {
       from : `Mern Authentication APP${process.env.EMAIL_USER}`,
       to : email,
       subject : "Reset OTP" ,
-      text : `Your OTP for reset your passsword for your Mern Authentication App is ${OTP} `
+      text : `Your OTP for reset your passsword of your Mern Authentication App is ${OTP} `
     }
 
     await transporter.sendMail( mailOptions );
@@ -337,7 +337,9 @@ export const resetPassword = async ( req , res ) => {
   const { email , otp , newPassword } = req.body ;
 
   if ( !email || !otp || !newPassword ){
-    return res.status(400).json({message : "Email , OTP and New Password is required "})
+    return res.status(409).json({
+  success : false , 
+  message : "Email , OTP and New Password is required "})
   }
 
   try {
@@ -345,17 +347,30 @@ export const resetPassword = async ( req , res ) => {
     const user = await User.findOne( { email } );
 
     if ( !user ){
-      return res.status(404).json({message : "User not found "})
+      return res.status(404).json({
+        success : false , 
+        message : "User not found "})
     }
 
-    if( otp === "" || user.resetOTP !== otp ){
-      return res.status(400).json({message : "Invalid OTP "})
+    if( !otp || user.resetOTP !== otp ){
+      return res.status(400).json({
+        success : false , 
+        message : "Invalid OTP "})
     }
 
     if( user.resetOTP_expire < Date.now() ){
-      return res.status(400).json({message : "OTP is expired "})
+      return res.status(400).json({
+        success : false , 
+        message : "OTP is expired "})
     }
+    
+    const decoded_Password = await bcrypt.compare( newPassword , user.password )
 
+    if( decoded_Password ){
+      return res.status(408).json({
+        success:false , 
+        message :"New Password must not be Previous Password"})
+    }
 
     const hashedPassword = await bcrypt.hash( newPassword , 11 );
 
