@@ -6,7 +6,7 @@ const userAuth = async ( req , res , next ) => {
     const { token } = req.cookies
     
     if( !token ){
-      return res.status(401).json({ message: "You must be logged in" })
+      return res.json({success :false , message: "You must be logged in" })
     }
   
     const decodeToken = jwt.verify( token , process.env.SECRET )
