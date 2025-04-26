@@ -15,7 +15,25 @@ const allowedOrigin = [ "http://localhost:5173" , "https://authentication-mern-a
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({origin : allowedOrigin , credentials: true}))
+// app.use(cors({origin : allowedOrigin , credentials: true}))
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.some(allowed => {
+      return origin === allowed || 
+             origin.endsWith(allowed.replace('https://', ''))
+    })) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  exposedHeaders: ['set-cookie'] // If using cookies
+}));
+
 
 app.get("/hehe" , (req , res)=>{
   res.send("api working hehe subhan ali")
