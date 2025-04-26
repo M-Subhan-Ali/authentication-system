@@ -22,7 +22,7 @@ app.use(cors({
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
     
-    if (allowedOrigins.some(allowed => {
+    if (allowedOrigin.some(allowed => {
       return origin === allowed || 
              origin.endsWith(allowed.replace('https://', ''))
     })) {
