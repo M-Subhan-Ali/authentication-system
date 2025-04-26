@@ -11,7 +11,7 @@ const port = process.env.PORT || 4000;
 
 DBConnect();
 
-const allowedOrigin = [ "http://localhost:5173" ] 
+const allowedOrigin = [ "http://localhost:5173" , "https://authentication-mern-app-gold.vercel.app/" ] 
 
 app.use(express.json());
 app.use(cookieParser());
