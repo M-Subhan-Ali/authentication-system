@@ -7,19 +7,20 @@ import { userAuthRouter } from "./routes/auth.routes.js";
 import { userRouter } from "./routes/user.routes.js";
 
 const app = express();
-const port = process.env.PORT || 4000;
 
-DBConnect();
-
-// const allowedOrigin = [  "https://authentication-mern-app-gold.vercel.app"  ] 
-
-app.use(express.json());
-app.use(cookieParser());
 app.use(cors({
   origin: 'https://authentication-front-end-app.vercel.app',
   methods: ['GET', 'POST' , 'PUT', 'DELETE' , 'PATCH'],
   credentials: true 
 }));
+
+const port = process.env.PORT || 4000;
+
+DBConnect();
+
+// const allowedOrigin = [  "https://authentication-mern-app-gold.vercel.app"  ] 
+app.use(express.json());
+app.use(cookieParser());
 // app.use(cors({origin : allowedOrigin , credentials: true}))
 // app.use(cors({origin : allowedOrigin , credentials: true}))
 // app.use(cors({
