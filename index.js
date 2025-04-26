@@ -16,6 +16,7 @@ const allowedOrigin = [ "http://localhost:5173" , "https://authentication-mern-a
 app.use(express.json());
 app.use(cookieParser());
 // app.use(cors({origin : allowedOrigin , credentials: true}))
+// app.use(cors({origin : allowedOrigin , credentials: true}))
 app.use(cors({
   origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps or curl requests)
